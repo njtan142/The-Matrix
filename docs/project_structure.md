@@ -41,6 +41,7 @@ C:\Users\njtan\Documents\GitHub\The-Matrix\
 ├───Physics.h - Header for general physics constants and utility functions.
 ├───README.md - Project README file, providing an overview.
 ├───Rectangle.cpp - Implements the Rectangle shape.
+├───REFACTOR.md - Notes or tasks related to code refactoring.
 ├───Rigidbody.cpp - Implements rigid body physics properties and behavior.
 ├───Scene.cpp - Implements the base scene management logic.
 ├───Scene.h - Header for the base scene class.
@@ -49,7 +50,7 @@ C:\Users\njtan\Documents\GitHub\The-Matrix\
 ├───sfml-graphics-2.dll - Dynamic Link Library for SFML graphics module.
 ├───sfml-graphics-d-2.dll - Debug Dynamic Link Library for SFML graphics module.
 ├───sfml-network-2.dll - Dynamic Link Library for SFML network module.
-├───sfml-network-d.dll - Debug Dynamic Link Library for SFML network module.
+├───sfml-network-d-2.dll - Debug Dynamic Link Library for SFML network module.
 ├───sfml-system-2.dll - Dynamic Link Library for SFML system module.
 ├───sfml-system-d-2.dll - Debug Dynamic Link Library for SFML system module.
 ├───sfml-window-2.dll - Dynamic Link Library for SFML window module.
@@ -66,143 +67,182 @@ C:\Users\njtan\Documents\GitHub\The-Matrix\
 ├───Vector2.cpp - Implements 2D vector operations.
 ├───Vector2.h - Header for the Vector2 class.
 ├───.git/ - Git version control directory.
+├───.vs/ - Visual Studio solution user options.
+├───docs/ - Contains project documentation files.
+│   ├───architecture.md - High-level overview of the system's architecture.
+│   ├───features.md - Lists the main features implemented in the codebase.
+│   ├───logic_classes.md - Detailed breakdown of the core business logic classes.
+│   ├───project_structure.md - Tree-like visual representation of the codebase's file and folder structure.
+│   ├───ui_classes.md - Detailed breakdown of the major user interface (UI) components or classes.
+│   └───user_flow.md - Step-by-step narrative or diagrammatic description of a key user journey.
 ├───imgui/ - Contains source files for the Dear ImGui library.
 │   ├───imconfig-SFML.h - ImGui configuration specific to SFML integration.
 │   ├───imconfig.h - General configuration header for ImGui.
+│   ├───imgui.cpp - Core implementation of Dear ImGui.
+│   ├───imgui.h - Main header for Dear ImGui.
 │   ├───imgui_draw.cpp - Implements ImGui drawing functionalities.
 │   ├───imgui_internal.h - Internal header for ImGui, not for public use.
 │   ├───imgui_tables.cpp - Implements ImGui table functionalities.
 │   ├───imgui_widgets.cpp - Implements standard ImGui widgets.
-│   ├───imgui-SFML_export.h - Export definitions for ImGui-SFML integration.
 │   ├───imgui-SFML.cpp - Implements SFML backend for ImGui.
 │   ├───imgui-SFML.h - Header for SFML backend for ImGui.
-│   ├───imgui.cpp - Core implementation of Dear ImGui.
-│   ├───imgui.h - Main header for Dear ImGui.
+│   ├───imgui-SFML_export.h - Export definitions for ImGui-SFML integration.
 │   ├───imstb_rectpack.h - Header for rectangle packing algorithm used by ImGui.
 │   ├───imstb_textedit.h - Header for text editing functionalities used by ImGui.
 │   └───imstb_truetype.h - Header for TrueType font loading used by ImGui.
-└───libraries/ - Contains external library files.
-    ├───include/ - Contains header files for external libraries.
-    │   └───SFML/ - SFML library header files.
-    │       ├───Audio.hpp - SFML audio module header.
-    │       ├───Config.hpp - SFML configuration header.
-    │       ├───GpuPreference.hpp - SFML GPU preference header.
-    │       ├───Graphics.hpp - SFML graphics module header.
-    │       ├───Main.hpp - SFML main entry point header.
-    │       ├───Network.hpp - SFML network module header.
-    │       ├───OpenGL.hpp - SFML OpenGL header.
-    │       ├───System.hpp - SFML system module header.
-    │       ├───Window.hpp - SFML window module header.
-    │       ├───Audio/ - SFML audio module specific headers.
-    │       │   ├───AlResource.hpp - OpenAL resource management header.
-    │       │   ├───Export.hpp - Export definitions for SFML audio.
-    │       │   ├───InputSoundFile.hpp - Input sound file handling header.
-    │       │   ├───Listener.hpp - Audio listener header.
-    │       │   ├───Music.hpp - Music streaming header.
-    │       │   ├───OutputSoundFile.hpp - Output sound file handling header.
-    │       │   ├───Sound.hpp - Sound playback header.
-    │       │   ├───SoundBuffer.hpp - Sound buffer header.
-    │       │   ├───SoundBufferRecorder.hpp - Sound buffer recorder header.
-    │       │   ├───SoundFileFactory.hpp - Sound file factory header.
-    │       │   ├───SoundFileFactory.inl - Inline implementations for sound file factory.
-    │       │   ├───SoundFileReader.hpp - Sound file reader header.
-    │       │   ├───SoundFileWriter.hpp - Sound file writer header.
-    │       │   ├───SoundRecorder.hpp - Sound recording header.
-    │       │   ├───SoundSource.hpp - Sound source base class header.
-    │       │   └───SoundStream.hpp - Sound stream base class header.
-    │       ├───Graphics/ - SFML graphics module specific headers.
-    │       │   ├───BlendMode.hpp - Blend mode definitions header.
-    │       │   ├───CircleShape.hpp - Circle shape header.
-    │       │   ├───Color.hpp - Color definitions header.
-    │       │   ├───ConvexShape.hpp - Convex shape header.
-    │       │   ├───Drawable.hpp - Drawable interface header.
-    │       │   ├───Export.hpp - Export definitions for SFML graphics.
-    │       │   ├───Font.hpp - Font handling header.
-    │       │   ├───Glsl.hpp - GLSL shader utilities header.
-    │       │   ├───Glsl.inl - Inline implementations for GLSL utilities.
-    │       │   ├───Glyph.hpp - Font glyph header.
-    │       │   ├───Image.hpp - Image handling header.
-    │       │   ├───PrimitiveType.hpp - Primitive type definitions header.
-    │       │   ├───Rect.hpp - Rectangle utility header.
-    │       │   ├───Rect.inl - Inline implementations for rectangle utility.
-    │       │   ├───RectangleShape.hpp - Rectangle shape header.
-    │       │   ├───RenderStates.hpp - Render states header.
-    │       │   ├───RenderTarget.hpp - Render target interface header.
-    │       │   ├───RenderTexture.hpp - Render texture header.
-    │       │   ├───RenderWindow.hpp - Render window header.
-    │       │   ├───Shader.hpp - Shader handling header.
-    │       │   ├───Shape.hpp - Base shape interface header.
-    │       │   ├───Sprite.hpp - Sprite handling header.
-    │       │   ├───Text.hpp - Text handling header.
-    │       │   ├───Texture.hpp - Texture handling header.
-    │       │   ├───Transform.hpp - Transform utility header.
-    │       │   ├───Transformable.hpp - Transformable interface header.
-    │       │   ├───Vertex.hpp - Vertex definition header.
-    │       │   ├───VertexArray.hpp - Vertex array header.
-    │       │   ├───VertexBuffer.hpp - Vertex buffer header.
-    │       │   └───View.hpp - View handling header.
-    │       ├───Network/ - SFML network module specific headers.
-    │       │   ├───Export.hpp - Export definitions for SFML network.
-    │       │   ├───Ftp.hpp - FTP client header.
-    │       │   ├───Http.hpp - HTTP client header.
-    │       │   ├───IpAddress.hpp - IP address header.
-    │       │   ├───Packet.hpp - Packet handling header.
-    │       │   ├───Socket.hpp - Socket base class header.
-    │       │   ├───SocketHandle.hpp - Socket handle header.
-    │       │   ├───SocketSelector.hpp - Socket selector header.
-    │       │   ├───TcpListener.hpp - TCP listener header.
-    │       │   ├───TcpSocket.hpp - TCP socket header.
-    │       │   └───UdpSocket.hpp - UDP socket header.
-    │       ├───System/ - SFML system module specific headers.
-    │       │   ├───Clock.hpp - Clock utility header.
-    │       │   ├───Err.hpp - Error handling header.
-    │       │   ├───Export.hpp - Export definitions for SFML system.
-    │       │   ├───FileInputStream.hpp - File input stream header.
-    │       │   ├───InputStream.hpp - Input stream base class header.
-    │       │   ├───Lock.hpp - Lock utility header.
-    │       │   ├───MemoryInputStream.hpp - Memory input stream header.
-    │       │   ├───Mutex.hpp - Mutex header.
-    │       │   ├───NativeActivity.hpp - Native activity header (Android).
-    │       │   ├───NonCopyable.hpp - Non-copyable base class header.
-    │       │   ├───Sleep.hpp - Sleep utility header.
-    │       │   ├───String.hpp - String utility header.
-    │       │   ├───String.inl - Inline implementations for string utility.
-    │       │   ├───Thread.hpp - Thread handling header.
-    │       │   ├───Thread.inl - Inline implementations for thread.
-    │       │   ├───ThreadLocal.hpp - Thread local storage header.
-    │       │   └───ThreadLocalPtr.hpp - Thread local pointer header.
-    │       └───Window/ - SFML window module specific headers.
-    │           └───... - Additional SFML window headers.
-    └───lib/ - Contains compiled library files.
-        ├───cmake/ - CMake related files for SFML.
-        │   └───SFML/ - SFML CMake configuration files.
-        ├───flac.lib - FLAC audio codec library.
-        ├───freetype.lib - FreeType font rendering library.
-        ├───ogg.lib - Ogg Vorbis audio codec library.
-        ├───openal32.lib - OpenAL 32-bit library.
-        ├───sfml-audio-d.lib - Debug SFML audio library.
-        ├───sfml-audio-s-d.lib - Debug static SFML audio library.
-        ├───sfml-audio-s.lib - Static SFML audio library.
-        ├───sfml-audio.lib - SFML audio library.
-        ├───sfml-graphics-d.lib - Debug SFML graphics library.
-        ├───sfml-graphics-s-d.lib - Debug static SFML graphics library.
-        ├───sfml-graphics-s.lib - Static SFML graphics library.
-        ├───sfml-graphics.lib - SFML graphics library.
-        ├───sfml-main-d.lib - Debug SFML main library.
-        ├───sfml-main.lib - SFML main library.
-        ├───sfml-network-d.lib - Debug SFML network library.
-        ├───sfml-network-s-d.lib - Debug static SFML network library.
-        ├───sfml-network-s.lib - Static SFML network library.
-        ├───sfml-network.lib - SFML network library.
-        ├───sfml-system-d.lib - Debug SFML system library.
-        ├───sfml-system-s-d.lib - Debug static SFML system library.
-        ├───sfml-system-s.lib - Static SFML system library.
-        ├───sfml-system.lib - SFML system library.
-        ├───sfml-window-d.lib - Debug SFML window library.
-        ├───sfml-window-s-d.lib - Debug static SFML window library.
-        ├───sfml-window-s.lib - Static SFML window library.
-        ├───sfml-window.lib - SFML window library.
-        ├───vorbis.lib - Vorbis audio codec library.
-        ├───vorbisenc.lib - Vorbis encoder library.
-        └───vorbisfile.lib - Vorbis file library.
+├───libraries/ - Contains external library files.
+│   ├───include/ - Contains header files for external libraries.
+│   │   └───SFML/ - SFML library header files.
+│   │       ├───Audio.hpp - SFML audio module header.
+│   │       ├───Config.hpp - SFML configuration header.
+│   │       ├───GpuPreference.hpp - SFML GPU preference header.
+│   │       ├───Graphics.hpp - SFML graphics module header.
+│   │       ├───Main.hpp - SFML main entry point header.
+│   │       ├───Network.hpp - SFML network module header.
+│   │       ├───OpenGL.hpp - SFML OpenGL header.
+│   │       ├───System.hpp - SFML system module header.
+│   │       ├───Window.hpp - SFML window module header.
+│   │       ├───Audio/ - SFML audio module specific headers.
+│   │       │   ├───AlResource.hpp - OpenAL resource management header.
+│   │       │   ├───Export.hpp - Export definitions for SFML audio.
+│   │       │   ├───InputSoundFile.hpp - Input sound file handling header.
+│   │       │   ├───Listener.hpp - Audio listener header.
+│   │       │   ├───Music.hpp - Music streaming header.
+│   │       │   ├───OutputSoundFile.hpp - Output sound file handling header.
+│   │       │   ├───Sound.hpp - Sound playback header.
+│   │       │   ├───SoundBuffer.hpp - Sound buffer header.
+│   │       │   ├───SoundBufferRecorder.hpp - Sound buffer recorder header.
+│   │       │   ├───SoundFileFactory.hpp - Sound file factory header.
+│   │       │   ├───SoundFileFactory.inl - Inline implementations for sound file factory.
+│   │       │   ├───SoundFileReader.hpp - Sound file reader header.
+│   │       │   ├───SoundFileWriter.hpp - Sound file writer header.
+│   │       │   ├───SoundRecorder.hpp - Sound recording header.
+│   │       │   ├───SoundSource.hpp - Sound source base class header.
+│   │       │   └───SoundStream.hpp - Sound stream base class header.
+│   │       ├───Graphics/ - SFML graphics module specific headers.
+│   │       │   ├───BlendMode.hpp - Blend mode definitions header.
+│   │       │   ├───CircleShape.hpp - Circle shape header.
+│   │       │   ├───Color.hpp - Color definitions header.
+│   │       │   ├───ConvexShape.hpp - Convex shape header.
+│   │       │   ├───Drawable.hpp - Drawable interface header.
+│   │       │   ├───Export.hpp - Export definitions for SFML graphics.
+│   │       │   ├───Font.hpp - Font handling header.
+│   │       │   ├───Glsl.hpp - GLSL shader utilities header.
+│   │       │   ├───Glsl.inl - Inline implementations for GLSL utilities.
+│   │       │   ├───Glyph.hpp - Font glyph header.
+│   │       │   ├───Image.hpp - Image handling header.
+│   │       │   ├───PrimitiveType.hpp - Primitive type definitions header.
+│   │       │   ├───Rect.hpp - Rectangle utility header.
+│   │       │   ├───Rect.inl - Inline implementations for rectangle utility.
+│   │       │   ├───RectangleShape.hpp - Rectangle shape header.
+│   │       │   ├───RenderStates.hpp - Render states header.
+│   │       │   ├───RenderTarget.hpp - Render target interface header.
+│   │       │   ├───RenderTexture.hpp - Render texture header.
+│   │       │   ├───RenderWindow.hpp - Render window header.
+│   │       │   ├───Shader.hpp - Shader handling header.
+│   │       │   ├───Shape.hpp - Base shape interface header.
+│   │       │   ├───Sprite.hpp - Sprite handling header.
+│   │       │   ├───Text.hpp - Text handling header.
+│   │       │   ├───Texture.hpp - Texture handling header.
+│   │       │   ├───Transform.hpp - Transform utility header.
+│   │       │   ├───Transformable.hpp - Transformable interface header.
+│   │       │   ├───Vertex.hpp - Vertex definition header.
+│   │       │   ├───VertexArray.hpp - Vertex array header.
+│   │       │   ├───VertexBuffer.hpp - Vertex buffer header.
+│   │       │   └───View.hpp - View handling header.
+│   │       ├───Network/ - SFML network module specific headers.
+│   │       │   ├───Export.hpp - Export definitions for SFML network.
+│   │       │   ├───Ftp.hpp - FTP client header.
+│   │       │   ├───Http.hpp - HTTP client header.
+│   │       │   ├───IpAddress.hpp - IP address header.
+│   │       │   ├───Packet.hpp - Packet handling header.
+│   │       │   ├───Socket.hpp - Socket base class header.
+│   │       │   ├───SocketHandle.hpp - Socket handle header.
+│   │       │   ├───SocketSelector.hpp - Socket selector header.
+│   │       │   ├───TcpListener.hpp - TCP listener header.
+│   │       │   ├───TcpSocket.hpp - TCP socket header.
+│   │       │   └───UdpSocket.hpp - UDP socket header.
+│   │       ├───System/ - SFML system module specific headers.
+│   │       │   ├───Clock.hpp - Clock utility header.
+│   │       │   ├───Err.hpp - Error handling header.
+│   │       │   ├───Export.hpp - Export definitions for SFML system.
+│   │       │   ├───FileInputStream.hpp - File input stream header.
+│   │       │   ├───InputStream.hpp - Input stream base class header.
+│   │       │   ├───Lock.hpp - Lock utility header.
+│   │       │   ├───MemoryInputStream.hpp - Memory input stream header.
+│   │       │   ├───Mutex.hpp - Mutex header.
+│   │       │   ├───NativeActivity.hpp - Native activity header (Android).
+│   │       │   ├───NonCopyable.hpp - Non-copyable base class header.
+│   │       │   ├───Sleep.hpp - Sleep utility header.
+│   │       │   ├───String.hpp - String utility header.
+│   │       │   ├───String.inl - Inline implementations for string utility.
+│   │       │   ├───Thread.hpp - Thread handling header.
+│   │       │   ├───Thread.inl - Inline implementations for thread.
+│   │       │   ├───ThreadLocal.hpp - Thread local storage header.
+│   │       │   └───ThreadLocalPtr.hpp - Thread local pointer header.
+│   │       └───Window/ - SFML window module specific headers.
+│   │           ├───Clipboard.hpp - Clipboard utility header.
+│   │           ├───Context.hpp - OpenGL context header.
+│   │           ├───ContextSettings.hpp - OpenGL context settings header.
+│   │           ├───Cursor.hpp - Mouse cursor header.
+│   │           ├───Event.hpp - Event handling header.
+│   │           ├───Export.hpp - Export definitions for SFML window.
+│   │           ├───GlResource.hpp - OpenGL resource header.
+│   │           ├───Joystick.hpp - Joystick handling header.
+│   │           ├───Keyboard.hpp - Keyboard handling header.
+│   │           ├───Mouse.hpp - Mouse handling header.
+│   │           ├───Sensor.hpp - Sensor handling header.
+│   │           ├───Touch.hpp - Touch handling header.
+│   │           ├───Window.hpp - Window handling header.
+│   │           ├───WindowHandle.hpp - Window handle header.
+│   │           ├───WindowStyle.hpp - Window style definitions header.
+│   │           └───VideoMode.hpp - Video mode handling header.
+│   └───lib/ - Contains compiled library files.
+│       ├───cmake/ - CMake related files for SFML.
+│       │   └───SFML/ - SFML CMake configuration files.
+│       │       ├───SFMLConfig.cmake - SFML CMake configuration file.
+│       │       ├───SFMLConfigDependencies.cmake - SFML CMake dependencies configuration file.
+│       │       ├───SFMLConfigVersion.cmake - SFML CMake version configuration file.
+│       │       ├───SFMLSharedTargets.cmake - SFML CMake shared targets file.
+│       │       ├───SFMLSharedTargets-debug.cmake - SFML CMake debug shared targets file.
+│       │       ├───SFMLSharedTargets-release.cmake - SFML CMake release shared targets file.
+│       │       ├───SFMLStaticTargets.cmake - SFML CMake static targets file.
+│       │       ├───SFMLStaticTargets-debug.cmake - SFML CMake debug static targets file.
+│       │       └───SFMLStaticTargets-release.cmake - SFML CMake release static targets file.
+│       ├───flac.lib - FLAC audio codec library.
+│       ├───freetype.lib - FreeType font rendering library.
+│       ├───ogg.lib - Ogg Vorbis audio codec library.
+│       ├───openal32.lib - OpenAL 32-bit library.
+│       ├───sfml-audio-d.lib - Debug SFML audio library.
+│       ├───sfml-audio-s-d.lib - Debug static SFML audio library.
+│       ├───sfml-audio-s.lib - Static SFML audio library.
+│       ├───sfml-audio.lib - SFML audio library.
+│       ├───sfml-graphics-d.lib - Debug SFML graphics library.
+│       ├───sfml-graphics-s-d.lib - Debug static SFML graphics library.
+│       ├───sfml-graphics-s.lib - Static SFML graphics library.
+│       ├───sfml-graphics.lib - SFML graphics library.
+│       ├───sfml-main-d.lib - Debug SFML main library.
+│       ├───sfml-main.lib - SFML main library.
+│       ├───sfml-network-d.lib - Debug SFML network library.
+│       ├───sfml-network-s-d.lib - Debug static SFML network library.
+│       ├───sfml-network-s.lib - Static SFML network library.
+│       ├───sfml-network.lib - SFML network library.
+│       ├───sfml-system-d.lib - Debug SFML system library.
+│       ├───sfml-system-s-d.lib - Debug static SFML system library.
+│       ├───sfml-system-s.lib - Static SFML system library.
+│       ├───sfml-system.lib - SFML system library.
+│       ├───sfml-window-d.lib - Debug SFML window library.
+│       ├───sfml-window-s-d.lib - Debug static SFML window library.
+│       ├───sfml-window-s.lib - Static SFML window library.
+│       ├───sfml-window.lib - SFML window library.
+│       ├───vorbis.lib - Vorbis audio codec library.
+│       ├───vorbisenc.lib - Vorbis encoder library.
+│       └───vorbisfile.lib - Vorbis file library.
+├───SFML/ - Output directory for SFML build artifacts.
+│   └───x64/ - 64-bit build output.
+│       ├───Debug/ - Debug build output.
+│       └───Release/ - Release build output.
+└───x64/ - Output directory for project build artifacts.
+    ├───Debug/ - Debug build output.
+    └───Release/ - Release build output.
 ```

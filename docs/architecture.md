@@ -24,7 +24,7 @@ The project is a desktop application developed in C++ that simulates various phy
 
 Communication within the application is primarily through direct function calls and object references within the C++ codebase.
 
-*   **Application to Scene**: The `Application` class manages the active `Scene` and calls its `Run()` method to execute the scene's logic and rendering loop.
+*   **Application to Scene**: The `Application` class manages the active `Scene` and calls its `UpdateAndRender()` method to execute the scene's logic and rendering loop.
 *   **Scene to Objects**: A `Scene` iterates through its `objectsList` and calls their `Update()` and `Draw()` methods, delegating simulation and rendering responsibilities to individual objects.
 *   **Objects to Components**: `Object`s interact with their attached `Component`s through direct method calls (e.g., `GetComponent<T>()`, `AddComponent<T>()`). Components, in turn, operate on the `Object`'s data (e.g., `Transform` component modifies the object's position).
 *   **UI Interaction**: ImGui-based UI elements directly manipulate the properties of `Object`s and `Component`s. This is achieved by calling `RenderEditorWindow()` on `Object`s and `RenderEditor()` on `Component`s, which then use ImGui widgets to modify the underlying C++ data.

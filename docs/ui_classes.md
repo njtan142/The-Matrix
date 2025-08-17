@@ -15,6 +15,7 @@ This document details the major user interface (UI) components or classes within
     *   Calls `ListenEvent` to process SFML events, which can trigger actions on `Object`s (e.g., `DetectObjectPress`) or `Scene` transitions (`OnSceneChange`).
     *   Invokes `RenderGameControls` to display UI elements, which likely interact with scene-specific logic or global application settings.
     *   Uses `SetImGuiGlobalSize` to configure the ImGui rendering, which then draws UI elements that can modify properties of `Object`s, `Component`s, or `Scene`s.
+    *   The `Run()` method orchestrates the main application loop, driving updates and rendering across all active components and scenes.
 
 ## Object
 
@@ -37,7 +38,7 @@ This document details the major user interface (UI) components or classes within
     *   The SFML `sf::View` (`view`) used for rendering the scene's content.
     *   (Implicit) Scene-specific simulation parameters that might be exposed via UI.
 *   **Interaction with Logic Classes**:
-    *   The `Run()` method orchestrates the scene's lifecycle, including calling `Update()` and `Draw()` on its `objectsList`, which in turn renders their visual representations.
+    *   The `UpdateAndRender()` method orchestrates the scene's lifecycle, including calling `Update()` on its `objectsList` and `Draw(sf::RenderWindow& window)` on each object, which in turn renders their visual representations.
     *   Scenes might expose UI elements (via ImGui, potentially through `Application::RenderGameControls` or their own `RenderEditorWindow` if they were `Object`s) to control simulation parameters or add/remove objects, directly affecting the scene's logic.
 
 ## Component
