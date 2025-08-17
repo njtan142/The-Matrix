@@ -27,3 +27,23 @@
         - `Circle.cpp`
         - `Pendulum.cpp`
         - `Rectangle.cpp`
+- [ ] Refactor Scene Creation and Management
+    - Subtasks:
+        - Create a `SceneFactory` class or a `std::map` within the `Application` class to manage scene creation.
+        - Replace the `if-else if` block in `Application::OnSceneChange()` with calls to the `SceneFactory` or map.
+    - Affected files:
+        - `Application.h`
+        - `Application.cpp`
+        - Potentially new `SceneFactory.h` and `SceneFactory.cpp`
+- [ ] Centralize Scene Names
+    - Subtasks:
+        - Define an array or `std::map` of scene names (string literals) in a central location (e.g., `Application.h` or a new configuration file).
+        - Use these centralized names in `Application::RenderGameControls` and `Application::OnSceneChange`.
+    - Affected files:
+        - `Application.h`
+        - `Application.cpp`
+- [ ] Improve Event Handling in `Application::ListenEvent`
+    - Subtasks:
+        - Remove the `break` statement from the `while` loop in `Application::ListenEvent` to ensure all events are processed.
+    - Affected files:
+        - `Application.cpp`

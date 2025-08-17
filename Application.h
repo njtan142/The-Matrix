@@ -30,6 +30,7 @@ public:
     void DetectObjectPress(const sf::Event& event, const std::list<Object*>* objectsList);
     void RenderGameControls(sf::View& view);
     void OnSceneChange();
+    void Run(); // New Run method for the main application loop
 
     sf::RenderWindow& getWindow() { return window; }
     bool isRunning() const { return running; }

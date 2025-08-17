@@ -196,11 +196,14 @@ void Application::OnSceneChange() {
     delete scene; // Delete the old scene
     scene = sceneEnCon;
     scene->InitializeObjects();
-    scene->Run();
+    
 }
 
 sf::View* Application::InitializeWindow() {
     ImGui::SFML::Init(window);
+    ImGui::SFML::UpdateFontTexture(); // Ensure font texture is updated after initialization
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
     SetImGuiGlobalSize(1.5f, 1.75f);
 
     sf::View* view = new sf::View(
@@ -220,4 +223,30 @@ void Application::SetImGuiGlobalSize(float scale, float fontSize) {
     float globalScale = scale;
     ImGui::GetStyle().ScaleAllSizes(globalScale);
     ImGui::GetIO().FontGlobalScale = fontSize;
+}
+
+void Application::Run() {
+    sf::Clock deltaClock;
+    previousMousePos = sf::Mouse::getPosition(window);
+
+    while (window.isOpen() && running) {
+        float deltaTime = deltaClock.restart().asSeconds();
+
+        ListenEvent(scene->view, &scene->objectsList);
+        previousMousePos = sf::Mouse::getPosition(window);
+
+        ImGui::SFML::Update(window, sf::seconds(deltaTime));
+
+        // Update and Render the current scene
+        if (scene) {
+            scene->UpdateAndRender(deltaTime);
+        }
+
+        RenderGameControls(*scene->view);
+        ImGui::SFML::Render(window);
+        window.display();
+    }
+    std::cout << "Closing" << std::endl;
+    running = false;
+    std::cout << "Closed" << std::endl;
 }

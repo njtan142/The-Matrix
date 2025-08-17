@@ -5,28 +5,27 @@ DualShape::DualShape(Object* entity) {
 }
 
 DualShape::DualShape(
-	sf::Shape* first_shape,
-	sf::Shape* second_shape,
+	std::unique_ptr<sf::Shape> first_shape,
+	std::unique_ptr<sf::Shape> second_shape,
 	const std::string& xGeometry,
 	const std::string& yGeometry,
 	const std::string& xGeometry2,
 	const std::string& yGeometry2,
-	const Vector2* geometry,
-	const Vector2* geometry2,
+	std::unique_ptr<Vector2> geometry,
+	std::unique_ptr<Vector2> geometry2,
 	Object* entity
-) {
-
-	this->shape = first_shape;
-	this->shape2 = second_shape;
-	this->xGeometry = xGeometry;
-	this->xGeometry2 = xGeometry2;
-	this->yGeometry = yGeometry;
-	this->yGeometry2 = yGeometry2;
-	this->geometry = *geometry;
-	this->geometry2 = *geometry2;
-	this->entity = entity;
+) : Shape(std::move(first_shape), xGeometry, yGeometry, std::move(geometry), entity),
+	geometry2(*geometry2),
+	xGeometry2(xGeometry2),
+	yGeometry2(yGeometry2)
+{
+	this->shape2 = std::move(second_shape);
 }
 
 sf::Shape* DualShape::Get2() {
-	return shape2;
+	return shape2.get();
+}
+
+DualShape::~DualShape() {
+    // Destructor definition
 }

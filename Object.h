@@ -1,12 +1,14 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <memory> // For std::unique_ptr
 #include "Transform.h"
 #include "SFML/Graphics.hpp" // Include SFML/Graphics.hpp for sf::RenderWindow
 
 class Object {
 public:
-    virtual ~Object() {}
+    virtual ~Object() {
+    }
 
     virtual void Update() {}
     virtual void RenderEditorWindow() {}
@@ -17,43 +19,43 @@ public:
     template<typename T>
     T* AddComponent() {
         // Check if the component type already exists
-        for (Component*& component : components) {
-            if (dynamic_cast<T*>(component)) {
+        for (auto& component : components) {
+            if (dynamic_cast<T*>(component.get())) {
                 // Component type already exists, return it
-                return dynamic_cast<T*>(component);
+                return dynamic_cast<T*>(component.get());
             }
         }
 
         // Component type does not exist, create and add it
-        T* newComponent = new T(this);
-        components.push_back(newComponent);
-        return newComponent;
+        std::unique_ptr<T> newComponent = std::make_unique<T>(this);
+        T* rawPtr = newComponent.get(); // Get raw pointer before moving
+        components.push_back(std::move(newComponent));
+        return rawPtr;
     }
 
     template<typename T>
-    T* AddComponent(T* component) {
+    T* AddComponent(std::unique_ptr<T> component) {
         // Check if the component type already exists
-        for (Component*& component : components) {
-            if (dynamic_cast<T*>(component)) {
+        for (auto& existingComponent : components) { // Renamed loop variable to avoid shadowing
+            if (dynamic_cast<T*>(existingComponent.get())) {
                 // Component type already exists, return it
-                return dynamic_cast<T*>(component);
+                return dynamic_cast<T*>(existingComponent.get());
             }
         }
 
-        components.push_back(component);
-        return component;
+        T* rawPtr = component.get(); // Get raw pointer before moving
+        components.push_back(std::move(component));
+        return rawPtr;
 
     }
 
 
     template<typename T>
     void RemoveComponent() {
-        for (std::vector<Component*>::iterator it = components.begin(); it != components.end(); ++it) {
-            T* component = dynamic_cast<T*>(*it);
+        for (auto it = components.begin(); it != components.end(); ++it) {
+            T* component = dynamic_cast<T*>(it->get());
             if (component) {
-                component->entity = nullptr;
                 components.erase(it);
-                delete component;
                 return;
             }
         }
@@ -61,8 +63,8 @@ public:
 
     template<typename T>
     T* GetComponent() {
-        for (Component*& component : components) {
-            T* typedComponent = dynamic_cast<T*>(component);
+        for (auto& component : components) {
+            T* typedComponent = dynamic_cast<T*>(component.get());
             if (typedComponent) {
                 return typedComponent;
             }
@@ -74,7 +76,7 @@ public:
 
 protected:
     bool edit = false;
-    std::vector<Component*> components;
+    std::vector<std::unique_ptr<Component>> components;
 
 public:
     std::string name;

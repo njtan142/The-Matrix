@@ -2,6 +2,7 @@
 #include "SFML/Graphics/RectangleShape.hpp"
 
 #include <string>
+#include <memory> // For std::unique_ptr
 
 #include "Vector2.h"
 #include "Component.h"
@@ -12,12 +13,13 @@ class Shape : public Component {
 public:
 	Shape() {}
 	Shape(Object* entity);
-	Shape(sf::Shape* shape, Object* entity);
-	Shape(sf::Shape* shape, const std::string& xGeometry, const std::string& yGeometry, const Vector2* geometry, Object* entity);
+	Shape(std::unique_ptr<sf::Shape> shape, Object* entity);
+	Shape(std::unique_ptr<sf::Shape> shape, const std::string& xGeometry, const std::string& yGeometry, std::unique_ptr<Vector2> geometry, Object* entity);
 
 	sf::Shape* Get();
 	bool Visible();
-	void RenderEditor() override;
+	    virtual void RenderEditor() override;
+    ~Shape();
 
 	virtual sf::Shape* Get2() {
 		return nullptr;
@@ -28,8 +30,8 @@ public:
 	Color color;
 
 protected:
-	sf::Shape* shape = nullptr;
-	sf::Shape* shape2 = nullptr;
+	std::unique_ptr<sf::Shape> shape;
+	std::unique_ptr<sf::Shape> shape2;
 	std::string xGeometry;
 	std::string yGeometry;
 	bool visible = false;
@@ -40,15 +42,16 @@ class DualShape : public Shape {
 public:
 	DualShape() {}
 	DualShape(Object* entity);
+	~DualShape();
 	DualShape(
-		sf::Shape* first_shape,
-		sf::Shape* second_shape,
+		std::unique_ptr<sf::Shape> first_shape,
+		std::unique_ptr<sf::Shape> second_shape,
 		const std::string& xGeometry,
 		const std::string& yGeometry,
 		const std::string& xGeometry2,
 		const std::string& yGeometry2,
-		const Vector2* geometry,
-		const Vector2* geometry2,
+		std::unique_ptr<Vector2> geometry,
+		std::unique_ptr<Vector2> geometry2,
 		Object* entity
 	);
 

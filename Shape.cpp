@@ -1,4 +1,3 @@
-
 #include "imgui-SFML.h"
 #include "imgui.h"
 #include "Shape.h"
@@ -13,8 +12,8 @@ Shape::Shape(Object* entity) {
 
 	visible = true;
 }
-Shape::Shape(sf::Shape* shape, Object* entity) {
-	this->shape = shape;
+Shape::Shape(std::unique_ptr<sf::Shape> shape, Object* entity) {
+	this->shape = std::move(shape);
 	this->entity = entity;
 
 	this->xGeometry = "X";
@@ -23,17 +22,18 @@ Shape::Shape(sf::Shape* shape, Object* entity) {
 	visible = true;
 }
 
-Shape::Shape(sf::Shape* shape, const std::string& xGeometry, const std::string& yGeometry, const Vector2* geometry, Object* entity)
+Shape::Shape(std::unique_ptr<sf::Shape> shape, const std::string& xGeometry, const std::string& yGeometry, std::unique_ptr<Vector2> geometry, Object* entity)
 	: xGeometry(xGeometry), yGeometry(yGeometry)
 {
-	this->shape = shape;
+	this->shape = std::move(shape);
 	this->geometry = *geometry;
 	this->entity = entity;
 	visible = true;
 }
 sf::Shape* Shape::Get() {
-	return shape;
+	return shape.get();
 }
+
 bool Shape::Visible() {
 	return visible;
 }
@@ -46,5 +46,9 @@ void Shape::RenderEditor() {
 	ImGui::DragFloat(yGeometry.c_str(), geometry.y);
 	ImGui::ColorEdit4("Color", color.Array());
 	ImGui::Spacing();
+}
+
+Shape::~Shape() {
+    // Destructor definition
 }
 

@@ -7,21 +7,21 @@
 
 
 Pendulum::Pendulum(const float length, const float radius, const float weight, const float x, const float y, const std::string& name) {
-	this->AddComponent<Transform>(new Transform(x, y, 0, this));
+	this->AddComponent<Transform>(std::make_unique<Transform>(x, y, 0, this));
 	transform = this->GetComponent<Transform>();
 	transform->size = Vector2(length, radius);
 
 	Vector2 circleCoord(x, y + length);
 
 	this->AddComponent<Shape>(
-		new Shape(
-			new sf::RectangleShape(Vector2(5, length).ToV2F()),
-			"Length",
-			"Height",
-			new Vector2(5, length),
-			this
-		)
-		/*new Shape(
+			std::make_unique<Shape>(
+		std::make_unique<sf::RectangleShape>(Vector2(5, length).ToV2F()),
+		"Width",
+		"Height",
+		std::make_unique<Vector2>(5, length),
+		this
+	)
+	/*new Shape(
 			new sf::CircleShape(radius, 25),
 			"Radius",
 			"Sides",
@@ -43,10 +43,10 @@ Pendulum::Pendulum(const float length, const float radius, const float weight, c
 
 	shape = this->GetComponent<Shape>();
 	shape2 = new Shape(
-		new sf::CircleShape(radius, 25),
+		std::make_unique<sf::CircleShape>(radius, 25),
 		"Radius",
 		"Sides",
-		new Vector2(radius, 25),
+		std::make_unique<Vector2>(radius, 25),
 		this
 	);
 
@@ -62,8 +62,8 @@ void Pendulum::RenderEditorWindow() {
 	ImGui::Begin(windowName.c_str());
 	ImGui::Spacing();
 
-	for (Component* component : components) {
-		component->RenderEditor();
+	for (std::vector<std::unique_ptr<Component>>::iterator it = components.begin(); it != components.end(); ++it) {
+		(*it)->RenderEditor();
 		ImGui::Dummy(ImVec2(0.0f, 10.0f));  // adds a 10-pixel tall blank widget
 	}
 

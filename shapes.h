@@ -2,6 +2,7 @@
 #include "Object.h"
 #include "Shape.h"
 #include "SFML/Graphics.hpp" // Include SFML/Graphics.hpp for sf::RenderWindow
+#include <memory> // Added for std::unique_ptr
 
 class Rectangle : public Object {
 public:
@@ -13,15 +14,8 @@ public:
 
 	void Draw(sf::RenderWindow& window) override; // Modified signature
 
-	~Rectangle() {
-		if (shape != nullptr) {
-			delete shape;
-			shape = nullptr;
-		}
-	}
-
 public:
-	Shape* shape;
+	
 };
 
 class Circle : public Object {
@@ -34,15 +28,8 @@ public:
 
 	void Draw(sf::RenderWindow& window) override; // Modified signature
 
-	~Circle() {
-		if (shape != nullptr) {
-			delete shape;
-			shape = nullptr;
-		}
-	}
-
 public:
-	Shape* shape;
+	
 };
 
 class Pendulum : public Object {
@@ -54,6 +41,10 @@ public:
 	void Update() override;
 
 	void Draw(sf::RenderWindow& window) override; // Modified signature
+
+	~Pendulum() {
+		delete shape2;
+	}
 
 public:
 	Shape* shape;

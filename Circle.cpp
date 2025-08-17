@@ -8,19 +8,19 @@
 
 
 Circle::Circle(const float width, const float height, const float x, const float y, const std::string& name) {
-	this->AddComponent<Transform>(new Transform(x, y, 0, this));
+	this->AddComponent<Transform>(std::make_unique<Transform>(x, y, 0, this));
 	transform = this->GetComponent<Transform>();
 	transform->size = Vector2(width, height);
 
 
 	this->AddComponent(
-		new Shape(new sf::CircleShape(width, height),
+		std::make_unique<Shape>(std::make_unique<sf::CircleShape>(width, height),
 			"Width",
 			"Height",
-			new Vector2(width, height),
+			std::make_unique<Vector2>(width, height),
 			this)
 	);
-	shape = this->GetComponent<Shape>();
+	
 
 	this->name = name;
 	edit = false;
@@ -34,8 +34,8 @@ void Circle::RenderEditorWindow() {
 	ImGui::Begin(windowName.c_str());
 	ImGui::Spacing();
 
-	for (Component* component : components) {
-		component->RenderEditor();
+	for (std::vector<std::unique_ptr<Component>>::iterator it = components.begin(); it != components.end(); ++it) {
+		(*it)->RenderEditor();
 		ImGui::Dummy(ImVec2(0.0f, 10.0f));  // adds a 10-pixel tall blank widget
 	}
 
@@ -49,23 +49,42 @@ void Circle::RenderEditorWindow() {
 }
 
 void Circle::Update() {
-	shape->Get()->setPosition(*transform->position.x, *transform->position.y);
-	shape->Get()->setRotation(transform->rotation);
+    Shape* circleShapeComponent = this->GetComponent<Shape>();
+    if (!circleShapeComponent) {
+        // Handle error: Shape component not found
+        return;
+    }
 
-	if (sf::CircleShape* rectShape = dynamic_cast<sf::CircleShape*>(shape->Get())) { // cast shape pointer to sf::RectangleShape
-		rectShape->setRadius(
-			*shape->geometry.x * *transform->scale.x
-		);
-		/*rectShape->setOrigin(
-			rectShape->getSize().x / 2.f,
-			rectShape->getSize().y / 2.f
-		);*/
-	}
+    sf::Shape* sfShape = circleShapeComponent->Get();
+    if (!sfShape) {
+        // Handle error: sf::Shape object not found
+        return;
+    }
 
-	shape->Get()->setFillColor(shape->color.toSFC());
+    sfShape->setPosition(*transform->position.x, *transform->position.y);
+    sfShape->setRotation(transform->rotation);
+
+    if (sf::CircleShape* rectShape = dynamic_cast<sf::CircleShape*>(sfShape)) {
+        rectShape->setRadius(
+            *circleShapeComponent->geometry.x * *transform->scale.x
+        );
+    }
+
+    sfShape->setFillColor(circleShapeComponent->color.toSFC());
 }
 
 
 void Circle::Draw(sf::RenderWindow& window) { // Modified signature
-	window.draw(*shape->Get()); // Use passed window
+    Shape* circleShapeComponent = this->GetComponent<Shape>();
+    if (!circleShapeComponent) {
+        // Handle error: Shape component not found
+        return;
+    }
+
+    sf::Shape* sfShape = circleShapeComponent->Get();
+    if (!sfShape) {
+        // Handle error: sf::Shape object not found
+        return;
+    }
+	window.draw(*sfShape); // Use passed window
 }

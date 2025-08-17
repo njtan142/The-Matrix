@@ -17,74 +17,45 @@
 
 Scene::Scene(Application& app) : app(app) {} // Constructor implementation
 
-void Scene::Run() {
-    sf::Clock deltaClock;
+Scene::~Scene() {
+    for (Object* obj : objectsList) {
+        delete obj;
+    }
+    objectsList.clear();
+}
+
+void Scene::UpdateAndRender(float deltaTime) {
+    // This function now performs one frame's worth of physics and rendering
+    // The main loop is now in Application::Run()
+
+    app.getWindow().clear(sf::Color(18, 33, 43)); // Color background
 
     for (Object* object : objectsList) {
         Shape& objectShape = *object->GetComponent<Shape>();
+        object->RenderEditorWindow();
         object->Update();
+        if (objectShape.Visible()) {
+            object->Draw(app.getWindow()); // Pass app.getWindow() here
+        }
     }
 
-    app.previousMousePos = sf::Mouse::getPosition(app.getWindow());
-    std::thread physicsThread([&]() { PhysicsHandler(); });
-    while (app.getWindow().isOpen() && app.isRunning())
-    {
-        app.ListenEvent(view, &objectsList);
-        app.previousMousePos = sf::Mouse::getPosition(app.getWindow());
-
-        ImGui::SFML::Update(app.getWindow(), deltaClock.restart());
-
-        app.getWindow().clear(sf::Color(18, 33, 43)); // Color background
-
-        for (Object* object : objectsList) {
-            Shape& objectShape = *object->GetComponent<Shape>();
-            object->RenderEditorWindow();
-            object->Update();
-            if (objectShape.Visible()) {
-                object->Draw(app.getWindow()); // Pass app.getWindow() here
-            }
-        }
-        if (app.getWindow().isOpen() && app.isRunning()) {
-            app.RenderGameControls(*view);
-            ImGui::SFML::Render(app.getWindow());
-        }
-        else {
-            app.setRunning(false);
-            continue;
-        }
-        app.getWindow().display();
-    }
-    std::cout << "Closing" << std::endl;
-    app.setRunning(false);
-    physicsThread.join();
-    objectsList.clear();
-    std::cout << "Closed" << std::endl;
-
+    // Call PhysicsHandler directly on the main thread
+    PhysicsHandler(deltaTime);
 }
 
 
-void Scene::PhysicsHandler() {
-    const int FPS = 120;
-    const std::chrono::milliseconds FRAME_TIME_MS(1000 / FPS);
-    std::chrono::steady_clock::time_point prevFrameTime = std::chrono::high_resolution_clock::now();
-
-    while (app.isRunning()) {
-        std::chrono::steady_clock::time_point currFrameTime = std::chrono::high_resolution_clock::now();
-        float deltaTime = std::chrono::duration<float, std::chrono::milliseconds::period>(currFrameTime - prevFrameTime).count() / 1000.0f;
-        prevFrameTime = currFrameTime;
-
-        for (Object* object : objectsList) {
-            ForceField* forceField = object->GetComponent<ForceField>();
-            if (forceField) {
-                forceField->Update(&objectsList, deltaTime);
-            }
-            RigidBody* rigidBody = object->GetComponent<RigidBody>();
-            if (rigidBody) {
-                rigidBody->Update(deltaTime);
-            }
+void Scene::PhysicsHandler(float deltaTime) {
+    for (Object* object : objectsList) {
+        ForceField* forceField = object->GetComponent<ForceField>();
+        if (forceField) {
+            forceField->Update(&objectsList, deltaTime);
         }
-        CollisionDetector(deltaTime);
+        RigidBody* rigidBody = object->GetComponent<RigidBody>();
+        if (rigidBody) {
+            rigidBody->Update(deltaTime);
+        }
     }
+    CollisionDetector(deltaTime);
 }
 
 namespace Dynamics {
@@ -99,7 +70,6 @@ namespace Dynamics {
             if (a->stationary && b->stationary) {
                 return;
             }
-            DEBUG_LOG("Collission Detected: " << a->entity->name << " | " << b->entity->name);
 
 
             Vector2 normal = b->entity->transform->position - a->entity->transform->position;
@@ -112,13 +82,10 @@ namespace Dynamics {
                 else {
                     velocityDirection = a->velocity.Normalized();
                 }
-                DEBUG_LOG(*normal.x << " || " << *normal.y);
-                DEBUG_LOG(*velocityDirection.x << " || " << *velocityDirection.y);
                 normal = Vector2(
                     (*normal.x + -*velocityDirection.x) / 2,
                     (*normal.y + -*velocityDirection.y) / 2
                 ).Normalized();
-                DEBUG_LOG(*normal.x << " || " << *normal.y);
             }
 
 
@@ -127,7 +94,6 @@ namespace Dynamics {
 
 
             if (velAlongNormal > 0) {
-                DEBUG_LOG("moving away");
                 return;
             }
 
@@ -166,9 +132,6 @@ namespace Dynamics {
             b->velocity = b->velocity + normal * impulse * a->mass;
 
 
-            DEBUG_LOG("A velocity: " << *a->velocity.x << " , " << *a->velocity.y);
-            DEBUG_LOG("B velocity: " << *b->velocity.x << " , " << *b->velocity.y);
-
             a->Update(deltaTime);
             b->Update(deltaTime);
         }
@@ -198,21 +161,35 @@ void Scene::CollisionDetector(float deltaTime) {
 
     for (Object* a_object : objectsList) {
         if (!a_object) {
-            return;
+            continue;
         }
-        sf::Shape* a_objectSFShape = a_object->GetComponent<Shape>()->Get();
+        Shape* a_objectShape = a_object->GetComponent<Shape>();
+        if (!a_objectShape) {
+            continue;
+        }
+        sf::Shape* a_objectSFShape = a_objectShape->Get();
+        if (!a_objectSFShape) {
+            continue;
+        }
         sf::FloatRect a_objectBounds = a_objectSFShape->getGlobalBounds();
         a_object->Update();
         for (Object* b_object : objectsList) {
             if (!b_object) {
-                return;
+                continue;
             }
             if (a_object == b_object) {
                 continue;
             }
             b_object->Update();
 
-            sf::Shape* b_objectSFShape = b_object->GetComponent<Shape>()->Get();
+            Shape* b_objectShape = b_object->GetComponent<Shape>();
+            if (!b_objectShape) {
+                continue;
+            }
+            sf::Shape* b_objectSFShape = b_objectShape->Get();
+            if (!b_objectSFShape) {
+                continue;
+            }
 
             bool intersection = b_objectSFShape->getGlobalBounds().intersects(a_objectBounds);
 

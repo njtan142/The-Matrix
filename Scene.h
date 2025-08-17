@@ -13,11 +13,11 @@ class Application; // Forward declaration
 
 class Scene {
 public:
-    virtual ~Scene() {}
+    virtual ~Scene();
     Scene(Application& app); // Modified constructor to accept Application reference
 
     virtual void InitializeObjects() {};
-    virtual void Run();
+    virtual void UpdateAndRender(float deltaTime); // Renamed from Run()
     virtual void Unload() {};
 
 
@@ -27,6 +27,6 @@ public:
 
 private:
     Application& app; // Reference to the Application instance
-    virtual void PhysicsHandler();
+    virtual void PhysicsHandler(float deltaTime);
     virtual void CollisionDetector(float deltaTime);
 };

@@ -12,7 +12,7 @@ int main()
     app.setScene(sceneEnCon); // Use the setScene method
 
     app.getScene()->InitializeObjects();
-    app.getScene()->Run();
+    app.Run(); // Call the main application loop
     // ImGui::SFML::Shutdown() is now handled in Application's destructor
     return 0;
 
