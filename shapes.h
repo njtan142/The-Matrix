@@ -1,6 +1,7 @@
 #pragma once
 #include "Object.h"
 #include "Shape.h"
+#include "SFML/Graphics.hpp" // Include SFML/Graphics.hpp for sf::RenderWindow
 
 class Rectangle : public Object {
 public:
@@ -10,7 +11,7 @@ public:
 
 	void Update() override;
 
-	void Draw() override;
+	void Draw(sf::RenderWindow& window) override; // Modified signature
 
 	~Rectangle() {
 		if (shape != nullptr) {
@@ -31,7 +32,7 @@ public:
 
 	void Update() override;
 
-	void Draw() override;
+	void Draw(sf::RenderWindow& window) override; // Modified signature
 
 	~Circle() {
 		if (shape != nullptr) {
@@ -52,11 +53,9 @@ public:
 
 	void Update() override;
 
-	void Draw() override;
+	void Draw(sf::RenderWindow& window) override; // Modified signature
 
 public:
 	Shape* shape;
 	Shape* shape2;
 };
-
-

@@ -1,0 +1,29 @@
+- [ ] Encapsulate Application State into an `Application` class.
+    - Subtasks:
+        - Create a new `Application` class with private members for `sf::RenderWindow window`, `bool running`, `Scene* scene`, `Scenes selectedScene`, and `sf::Vector2i previousMousePos`.
+        - Move the `InitializeWindow`, `SetImGuiGlobalSize`, `ListenEvent`, `OnMousePress`, `OnMouseMove`, `OnResize`, `DetectObjectPress`, `RenderGameControls`, and `OnSceneChange` functions into the `Application` class as member functions.
+        - Update all call sites to use the `Application` class instance.
+        - Remove the `Application` namespace and `extern` declarations.
+    - Affected files:
+        - `Application.h`
+        - `Application.cpp`
+        - `main.cpp` (where `Application` functions are called)
+        - Other files that might directly access `Application::window` or `Application::scene` (will identify during implementation).
+- [ ] Update Scene and other classes to use the `Application` class instance.
+    - Subtasks:
+        - Modify `Scene.h` and `Scene.cpp` to accept an `Application&` reference in its constructor and store it as a member.
+        - Update `Scene.cpp` to call `Application` member functions (e.g., `app.ListenEvent()`, `app.RenderGameControls()`, `app.getWindow()`) instead of direct global access.
+        - Modify `AccellerationScene.cpp`, `BounceSimulationScene.cpp`, `EnergyConservationScene.cpp`, `EnergyConservationSceneBilliard.cpp`, `GravitySimulationScene.cpp`, `PendulumScene.cpp` to remove direct access to `Application::running`. Instead, they should use `app.isRunning()` and `app.setRunning(false)` if needed, or ideally, the `Application` class should manage the main loop and its running state.
+        - Modify `Circle.cpp`, `Pendulum.cpp`, `Rectangle.cpp` to ensure they receive a valid `sf::RenderWindow&` object for drawing operations. This might involve passing the window reference down through the `Scene` and `Object` hierarchy.
+    - Affected files:
+        - `Scene.h`
+        - `Scene.cpp`
+        - `AccellerationScene.cpp`
+        - `BounceSimulationScene.cpp`
+        - `EnergyConservationScene.cpp`
+        - `EnergyConservationSceneBilliard.cpp`
+        - `GravitySimulationScene.cpp`
+        - `PendulumScene.cpp`
+        - `Circle.cpp`
+        - `Pendulum.cpp`
+        - `Rectangle.cpp`

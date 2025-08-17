@@ -114,9 +114,9 @@ void Pendulum::Update() {
 
 }
 
-void Pendulum::Draw() {
-	Application::window.draw(*shape->Get());
-	Application::window.draw(*shape2->Get());
+void Pendulum::Draw(sf::RenderWindow& window) { // Modified signature
+	window.draw(*shape->Get());
+	window.draw(*shape2->Get());
 
 }
 

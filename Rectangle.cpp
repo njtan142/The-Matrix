@@ -65,8 +65,6 @@ void Rectangle::Update() {
 	shape->Get()->setFillColor(shape->color.toSFC());
 }
 
-void Rectangle::Draw() {
-	Application::window.draw(*shape->Get());
+void Rectangle::Draw(sf::RenderWindow& window) { // Modified signature
+	window.draw(*shape->Get());
 }
-
-

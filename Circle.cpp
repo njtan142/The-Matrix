@@ -66,8 +66,6 @@ void Circle::Update() {
 }
 
 
-void Circle::Draw() {
-	Application::window.draw(*shape->Get());
+void Circle::Draw(sf::RenderWindow& window) { // Modified signature
+	window.draw(*shape->Get()); // Use passed window
 }
-
-

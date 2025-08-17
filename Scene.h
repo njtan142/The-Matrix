@@ -7,23 +7,26 @@
 #include <list>
 
 #include "Object.h"
+class Application; // Forward declaration
+
+#include "Application.h" // Keep this include for full definition
 
 class Scene {
 public:
-	virtual ~Scene() {}
-	Scene() {}
+    virtual ~Scene() {}
+    Scene(Application& app); // Modified constructor to accept Application reference
 
-	virtual void InitializeObjects() {};
-	virtual void Run();
-	virtual void Unload() {};
+    virtual void InitializeObjects() {};
+    virtual void Run();
+    virtual void Unload() {};
 
 
 public:
-	std::list<Object*> objectsList;
-	bool* running = nullptr;
-	sf::View* view = nullptr;
+    std::list<Object*> objectsList;
+    sf::View* view = nullptr; // Keep view for now
 
 private:
-	virtual void PhysicsHandler();
-	virtual void CollisionDetector(float deltaTime);
+    Application& app; // Reference to the Application instance
+    virtual void PhysicsHandler();
+    virtual void CollisionDetector(float deltaTime);
 };

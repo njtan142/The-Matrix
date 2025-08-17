@@ -6,13 +6,14 @@
 
 int main()
 {
-	sf::View* view = Application::InitializeWindow();
-	Scene* sceneEnCon = new EnergyConservationSceneBilliard(view);
-	Application::scene = sceneEnCon;
+    Application app; // Create an instance of the Application class
+    sf::View* view = app.InitializeWindow();
+    Scene* sceneEnCon = new EnergyConservationSceneBilliard(view, app); // Pass app to constructor
+    app.setScene(sceneEnCon); // Use the setScene method
 
-	Application::scene->InitializeObjects();
-	Application::scene->Run();
-	ImGui::SFML::Shutdown();
-	return 0;
+    app.getScene()->InitializeObjects();
+    app.getScene()->Run();
+    // ImGui::SFML::Shutdown() is now handled in Application's destructor
+    return 0;
 
 }

@@ -7,3 +7,8 @@
 void Object::OpenEditor() {
 	edit = true;
 }
+
+void Object::Draw(sf::RenderWindow& window) {
+    // Default empty implementation for the base class
+    // Derived classes will provide their specific drawing logic
+}
