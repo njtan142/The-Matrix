@@ -1,4 +1,4 @@
-- [ ] Encapsulate Application State into an `Application` class.
+- [x] Encapsulate Application State into an `Application` class.
     - Subtasks:
         - Create a new `Application` class with private members for `sf::RenderWindow window`, `bool running`, `Scene* scene`, `Scenes selectedScene`, and `sf::Vector2i previousMousePos`.
         - Move the `InitializeWindow`, `SetImGuiGlobalSize`, `ListenEvent`, `OnMousePress`, `OnMouseMove`, `OnResize`, `DetectObjectPress`, `RenderGameControls`, and `OnSceneChange` functions into the `Application` class as member functions.
@@ -9,7 +9,7 @@
         - `Application.cpp`
         - `main.cpp` (where `Application` functions are called)
         - Other files that might directly access `Application::window` or `Application::scene` (will identify during implementation).
-- [ ] Update Scene and other classes to use the `Application` class instance.
+- [x] Update Scene and other classes to use the `Application` class instance.
     - Subtasks:
         - Modify `Scene.h` and `Scene.cpp` to accept an `Application&` reference in its constructor and store it as a member.
         - Update `Scene.cpp` to call `Application` member functions (e.g., `app.ListenEvent()`, `app.RenderGameControls()`, `app.getWindow()`) instead of direct global access.
